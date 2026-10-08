@@ -1,0 +1,10 @@
+{
+  "sre_agent_trajectories": {
+    "file_name": "sre_trajectories_llama_factory.jsonl",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations",
+      "tools": "tools"
+    }
+  }
+}

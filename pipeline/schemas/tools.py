@@ -1,0 +1,363 @@
+"""
+SRE and DevOps Incident Remediation Tool Schema Registry.
+Strictly formatted according to OpenAI / ShareGPT function calling specifications.
+"""
+
+from typing import Dict, Any, List
+
+DEVOPS_TOOLS: List[Dict[str, Any]] = [
+    # -------------------------------------------------------------
+    # 1. Kubernetes Diagnostics & Management Tools
+    # -------------------------------------------------------------
+    {
+        "type": "function",
+        "function": {
+            "name": "k8s_get_pods",
+            "description": "List pods in a specified namespace with optional status and label filtering.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "namespace": {
+                        "type": "string",
+                        "description": "The Kubernetes namespace (e.g., 'production', 'staging', 'default')."
+                    },
+                    "label_selector": {
+                        "type": "string",
+                        "description": "Optional label selector query (e.g., 'app=checkout-service', 'tier=backend')."
+                    },
+                    "field_selector": {
+                        "type": "string",
+                        "description": "Optional field selector query (e.g., 'status.phase!=Running')."
+                    }
+                },
+                "required": ["namespace"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "k8s_describe_pod",
+            "description": "Retrieve detailed metadata, events, resource limits, and container states for a specific pod.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "namespace": {
+                        "type": "string",
+                        "description": "The Kubernetes namespace where the pod is located."
+                    },
+                    "pod_name": {
+                        "type": "string",
+                        "description": "The exact name of the pod (e.g., 'checkout-api-7c4d8b9f-x82kz')."
+                    }
+                },
+                "required": ["namespace", "pod_name"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "k8s_get_logs",
+            "description": "Fetch application logs from a container within a Kubernetes pod.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "namespace": {
+                        "type": "string",
+                        "description": "The Kubernetes namespace."
+                    },
+                    "pod_name": {
+                        "type": "string",
+                        "description": "Name of the target pod."
+                    },
+                    "container_name": {
+                        "type": "string",
+                        "description": "Name of the container inside the pod (optional if single container)."
+                    },
+                    "tail_lines": {
+                        "type": "integer",
+                        "description": "Number of most recent log lines to retrieve (default: 100, max: 1000)."
+                    },
+                    "previous": {
+                        "type": "boolean",
+                        "description": "If true, print the logs for the previous instance of the container if it terminated."
+                    }
+                },
+                "required": ["namespace", "pod_name"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "k8s_patch_deployment",
+            "description": "Apply a JSON/strategic patch to a deployment specification (e.g., updating memory limits or environment variables).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "namespace": {
+                        "type": "string",
+                        "description": "The Kubernetes namespace."
+                    },
+                    "deployment_name": {
+                        "type": "string",
+                        "description": "Name of the Kubernetes deployment."
+                    },
+                    "patch_body": {
+                        "type": "object",
+                        "description": "JSON patch object containing updated specifications (e.g., resource limits or replica counts)."
+                    }
+                },
+                "required": ["namespace", "deployment_name", "patch_body"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "k8s_rollout_restart",
+            "description": "Trigger a graceful rolling restart of all pods managed by a specified deployment or daemonset.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "namespace": {
+                        "type": "string",
+                        "description": "The Kubernetes namespace."
+                    },
+                    "resource_type": {
+                        "type": "string",
+                        "enum": ["deployment", "statefulset", "daemonset"],
+                        "description": "Type of resource to restart."
+                    },
+                    "resource_name": {
+                        "type": "string",
+                        "description": "Name of the resource to restart."
+                    }
+                },
+                "required": ["namespace", "resource_type", "resource_name"]
+            }
+        }
+    },
+
+    # -------------------------------------------------------------
+    # 2. Linux OS & System Diagnostics Tools
+    # -------------------------------------------------------------
+    {
+        "type": "function",
+        "function": {
+            "name": "linux_check_system_resources",
+            "description": "Inspect CPU utilization, RAM usage, swap space, and disk mount capacity on a host.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "host_id": {
+                        "type": "string",
+                        "description": "Identifier or hostname of the node/server (e.g., 'node-worker-04')."
+                    },
+                    "metric_types": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": ["cpu", "memory", "disk", "iowait"]
+                        },
+                        "description": "Specific metrics to inspect."
+                    }
+                },
+                "required": ["host_id"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "linux_inspect_process",
+            "description": "List top resource-consuming processes or inspect details of a specific PID.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "host_id": {
+                        "type": "string",
+                        "description": "Hostname or node identifier."
+                    },
+                    "sort_by": {
+                        "type": "string",
+                        "enum": ["cpu", "memory", "io"],
+                        "description": "Resource dimension to sort top processes by."
+                    },
+                    "pid": {
+                        "type": "integer",
+                        "description": "Specific process ID to inspect (optional)."
+                    }
+                },
+                "required": ["host_id"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "linux_check_network_connections",
+            "description": "Inspect active network sockets, connection states (ESTABLISHED, TIME_WAIT, SYN_SENT), and port bindings.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "host_id": {
+                        "type": "string",
+                        "description": "Target hostname or IP."
+                    },
+                    "port": {
+                        "type": "integer",
+                        "description": "Specific port to inspect (e.g., 5432, 8080)."
+                    },
+                    "state": {
+                        "type": "string",
+                        "enum": ["ESTABLISHED", "TIME_WAIT", "LISTEN", "CLOSE_WAIT", "SYN_SENT"],
+                        "description": "Filter by TCP socket state."
+                    }
+                },
+                "required": ["host_id"]
+            }
+        }
+    },
+
+    # -------------------------------------------------------------
+    # 3. Cloud & APM Metric Tools (CloudWatch / Datadog style)
+    # -------------------------------------------------------------
+    {
+        "type": "function",
+        "function": {
+            "name": "metrics_query_latency_percentiles",
+            "description": "Query p50, p90, p95, and p99 latency metrics for an API endpoint or microservice over a time window.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "service_name": {
+                        "type": "string",
+                        "description": "Name of the microservice (e.g., 'payments-api', 'auth-service')."
+                    },
+                    "time_window_minutes": {
+                        "type": "integer",
+                        "description": "Duration in minutes to look back (e.g., 15, 60)."
+                    },
+                    "endpoint": {
+                        "type": "string",
+                        "description": "Specific HTTP route or gRPC method (optional)."
+                    }
+                },
+                "required": ["service_name", "time_window_minutes"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "metrics_query_error_rates",
+            "description": "Query HTTP 4xx/5xx status code rates and exception frequencies for a given service.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "service_name": {
+                        "type": "string",
+                        "description": "Name of the microservice."
+                    },
+                    "time_window_minutes": {
+                        "type": "integer",
+                        "description": "Time window in minutes."
+                    },
+                    "status_code_filter": {
+                        "type": "string",
+                        "enum": ["5xx", "4xx", "all_errors"],
+                        "description": "Type of errors to aggregate."
+                    }
+                },
+                "required": ["service_name", "time_window_minutes"]
+            }
+        }
+    },
+
+    # -------------------------------------------------------------
+    # 4. Database Diagnostics Tools (PostgreSQL style)
+    # -------------------------------------------------------------
+    {
+        "type": "function",
+        "function": {
+            "name": "db_query_active_sessions",
+            "description": "Query current active database connections, state (active, idle in transaction), and query durations.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "database_name": {
+                        "type": "string",
+                        "description": "Name of the target database."
+                    },
+                    "state_filter": {
+                        "type": "string",
+                        "enum": ["active", "idle in transaction", "waiting"],
+                        "description": "Connection state filter."
+                    },
+                    "min_duration_seconds": {
+                        "type": "number",
+                        "description": "Minimum execution duration in seconds to filter long-running queries."
+                    }
+                },
+                "required": ["database_name"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "db_check_locks_and_deadlocks",
+            "description": "Detect exclusive table/row lock contentions, blocking PID chains, and deadlocks in PostgreSQL.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "database_name": {
+                        "type": "string",
+                        "description": "Name of the database."
+                    }
+                },
+                "required": ["database_name"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "db_terminate_backend",
+            "description": "Safely cancel a query (pg_cancel_backend) or terminate a blocking database connection (pg_terminate_backend).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "database_name": {
+                        "type": "string",
+                        "description": "Name of the database."
+                    },
+                    "pid": {
+                        "type": "integer",
+                        "description": "The process ID of the backend session to terminate."
+                    },
+                    "graceful": {
+                        "type": "boolean",
+                        "description": "If true, cancel current query first; if false, forcefully terminate backend."
+                    }
+                },
+                "required": ["database_name", "pid"]
+            }
+        }
+    }
+]
+
+
+def get_tool_by_name(name: str) -> Dict[str, Any]:
+    """Retrieve tool schema definition by function name."""
+    for tool in DEVOPS_TOOLS:
+        if tool["function"]["name"] == name:
+            return tool
+    raise KeyError(f"Tool '{name}' not found in registry.")
+
+
+def get_all_tool_names() -> List[str]:
+    """Return all registered function names."""
+    return [t["function"]["name"] for t in DEVOPS_TOOLS]

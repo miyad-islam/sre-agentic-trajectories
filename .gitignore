@@ -1,0 +1,32 @@
+# SSH & Security Keys
+AMD_GPU*
+*.pem
+*.key
+*.pub
+.env
+
+# Large Dataset Files (hosted on Hugging Face)
+output/batches/
+*.jsonl
+*.jsonl.gz
+dist/commercial/*.zip
+dist/openai_format/*.jsonl
+dist/llama_factory/*.jsonl
+dist/huggingface_sample/*.jsonl
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+env/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# System & IDE files
+.agents/
+.DS_Store
+Thumbs.db
+*.log
