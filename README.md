@@ -96,7 +96,7 @@ This repository provides the complete synthetic generation engine, schema declar
 ### 1. Installation
 
 ```bash
-git clone https://github.com/miyad316/sre-agentic-trajectories.git
+git clone https://github.com/miyad-islam/sre-agentic-trajectories.git
 cd sre-agentic-trajectories
 pip install -r requirements.txt
 ```
