@@ -4,6 +4,10 @@ AMD_GPU*
 *.key
 *.pub
 .env
+kaggle.json
+**/kaggle.json
+Synthetic_datasets/
+HUGGINGFACE_README_UPDATE.md
 
 # Large Dataset Files (hosted on Hugging Face)
 output/batches/

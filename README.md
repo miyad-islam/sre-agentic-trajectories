@@ -1,5 +1,6 @@
 # SRE & DevOps Agentic Trajectory Synthesis Engine
 
+[![Commercial Dataset on Gumroad](https://img.shields.io/badge/Commercial%20Dataset-Buy%20on%20Gumroad%20($9.99)-ff69b4.svg?style=flat&logo=gumroad)](https://miyadislam.gumroad.com/l/sre-agentic-trajectories)
 [![Hugging Face Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-sre--agentic--trajectories-yellow.svg)](https://huggingface.co/datasets/miyad316/sre-agentic-trajectories-devops)
 [![Accelerator](https://img.shields.io/badge/Hardware-AMD%20Instinct%20MI300X%20(192GB)-ED1C24.svg)](https://www.amd.com/en/products/accelerators/instinct/mi300.html)
 [![Backend](https://img.shields.io/badge/Inference-vLLM%20(ROCm%206.2)-purple.svg)](https://github.com/vllm-project/vllm)
@@ -24,6 +25,9 @@ This repository provides the complete synthetic generation engine, schema declar
 
 👉 **Download the Open 2,000 Preview Sample on Hugging Face:**  
 [https://huggingface.co/datasets/miyad316/sre-agentic-trajectories-devops](https://huggingface.co/datasets/miyad316/sre-agentic-trajectories-devops)
+
+🛒 **Full 5,000 Production Dataset & Commercial License (~~$49~~ $9.99 Launch Special):**  
+[https://miyadislam.gumroad.com/l/sre-agentic-trajectories](https://miyadislam.gumroad.com/l/sre-agentic-trajectories)
 
 ---
 
@@ -138,5 +142,4 @@ Fine-tuning compact models (`Qwen-2.5-7B` / `Llama-3.1-8B`) using this dataset d
 ## 📄 License & Attribution
 
 * **Code:** Licensed under [Apache 2.0](LICENSE).
-* **Sample Data:** Licensed under [CC-BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) on [Hugging Face](https://huggingface.co/datasets/miyad316/sre-agentic-trajectories-devops).
-* **Commercial Inquiries:** Contact `miyadislam316@gmail.com` for full un-sampled 5,000 production dataset licensing.
+* **Commercial Inquiries & Full 5,000 Dataset:** Purchase the full un-sampled 5,000 production dataset with commercial training indemnity (~~$49~~ $9.99 launch special, instant download) on Gumroad: [https://miyadislam.gumroad.com/l/sre-agentic-trajectories](https://miyadislam.gumroad.com/l/sre-agentic-trajectories) or contact `miyadislam316@gmail.com`.
